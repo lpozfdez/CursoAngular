@@ -1,0 +1,15 @@
+*{
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+:host {
+  display: block;
+}
+
+div.contenedor{
+  margin-top: 30px;
+  padding: 30px;
+  border: 2px solid aqua;
+  border-radius: 7px;
+}
+

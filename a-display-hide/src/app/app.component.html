@@ -1,0 +1,18 @@
+<div class="container container-fluid pt-5">
+
+  <h4>Hello World</h4>
+
+  <button
+    class="btn btn-outline-info btn-lg m-5"
+    (click)="openClosedAlert(divAlert)"
+  > {{button}} </button>
+
+  <div class="alert alert-success" #divAlert hidden>
+    Hello World!
+    <img src="https://img.icons8.com/color/48/earth-planet--v2.png" alt="mundo">
+  </div><!-- #divAlert: referencia local al elemento HTML -->
+
+</div>
+
+
+

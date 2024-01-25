@@ -1,0 +1,23 @@
+<div class="container contenedor" >
+  <h3>Componente padre</h3>
+  <div> {{messageChild}}</div>
+
+  <hr>
+
+  <button class="btn btn-primary btn-lg m-3" (click)="setMessageByService()" >Use Service</button>
+
+  <button class="btn btn-warning btn-lg m-3" (click)="setMessageByInput()">Use Input Property</button><!--Evento que realiza el cambio en la prop message-->
+
+  <button class="btn btn-danger btn-lg m-3" (click)="setMessageByObs()" >Use Observable</button>
+
+  <!-- Mandamos la prop message al hijo  (messageEmit)="getMessageChildOutput($event)" -->
+  <app-hijo
+    [messageParent]="message"
+    [messageParentObs]="messageObj"
+    (messageChildOutput)="getMessageChildOutput($event)"
+    (messageChildObs)="getMessageChildObs($event)"
+    (messageToParent)="getMessageByService( $event )"
+  ></app-hijo>
+
+
+</div>
