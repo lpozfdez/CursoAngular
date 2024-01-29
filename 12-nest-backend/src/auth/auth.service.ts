@@ -1,18 +1,21 @@
 import { BadRequestException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { CreateUserDto, RegisterUserDto, UpdateAuthDto, LoginDto } from './dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './entities/user.entity';
 import { Model } from 'mongoose';
 import * as bcryptjs from 'bcryptjs';
-import { LoginDto } from './dto/login.dto';
+import { JwtService } from '@nestjs/jwt';
+import { JwtPayload } from './interfaces/jwt-payload';
+import { LoginResponse } from './interfaces/login-response';
+
 
 @Injectable()
 export class AuthService {
 
   constructor( 
     @InjectModel( User.name ) 
-    private userModel: Model<User> 
+      private userModel: Model<User>,
+      private jwtService: JwtService,
     ) 
   {}
 
@@ -44,10 +47,20 @@ export class AuthService {
     }
   }
 
+  async register(registerUserDto: RegisterUserDto): Promise<LoginResponse>{
+
+    const user = await this.create(registerUserDto);
+    console.log({user});
+
+    return {
+      user: user,
+      token: this.getJwtToken( {id: user._id} )
+    }
+
+  }
  
-  async login( loginDto: LoginDto ){
+  async login( loginDto: LoginDto ): Promise<LoginResponse>{
     
-    console.log({loginDto});
     const { email,password } = loginDto;
     const user = await this.userModel.findOne({email});
     if(!user){
@@ -62,15 +75,21 @@ export class AuthService {
     const { password:_, ...rest } = user.toJSON();
 
     return {
-      ...rest,
-      token: 'ABC-123'
+      user: rest,
+      token: this.getJwtToken({id:user.id}),
     }
   
   }
 
 
-  findAll() {
-    return `This action returns all auth`;
+  findAll(): Promise<User[]> {
+    return this.userModel.find();
+  }
+
+  async findUSerById( userId:string ){
+    const user = await this.userModel.findById(userId);
+    const { password, ...rest } = user.toJSON();
+    return rest;
   }
 
   findOne(id: number) {
@@ -84,4 +103,17 @@ export class AuthService {
   remove(id: number) {
     return `This action removes a #${id} auth`;
   }
+
+  getJwtToken( payload:JwtPayload ){
+    const token = this.jwtService.sign(payload);
+    return token;
+  }
+
+
+
+
+
+
+
+
 }
