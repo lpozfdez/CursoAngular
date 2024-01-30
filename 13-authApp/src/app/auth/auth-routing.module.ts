@@ -17,7 +17,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
+  imports: [RouterModule.forRoot(routes, {useHash:true})],//Configuración de despliegue
   exports: [RouterModule]
 })
 export class AuthRoutingModule { }
