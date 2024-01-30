@@ -8,7 +8,9 @@ import { MongooseModule } from '@nestjs/mongoose';
   imports: [
     AuthModule, 
     ConfigModule.forRoot(),
-    MongooseModule.forRoot(process.env.MONGO_URI),
+    MongooseModule.forRoot(process.env.MONGO_URI, {
+      dbName: process.env.MONGO_DB_NAME//Cambiamos el nombre de la base de datos
+    }),
   ],
   controllers: [],
   providers: [],
